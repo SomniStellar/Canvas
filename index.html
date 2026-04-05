@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hun.S Baek | Business Card</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="page-shell">
+    <section class="hero-copy">
+      <p class="eyebrow">Personal Business Card</p>
+      <h1>Hun.S Baek</h1>
+      <p class="subtitle">
+        The Canvas of Myself
+      </p>
+    </section>
+
+    <section class="card-stage" aria-label="명함 카드 영역">
+      <button
+        class="card-flip-button"
+        id="business-card"
+        type="button"
+        aria-pressed="false"
+        aria-label="명함 카드 뒤집기"
+      >
+        <span class="card-flip-inner">
+          <span class="card-face card-front">
+            <span class="card-glow" aria-hidden="true"></span>
+            <span class="card-front-layout">
+              <span class="profile-panel">
+                <span class="profile-photo" aria-hidden="true">
+                  <span>PHOTO</span>
+                </span>
+              </span>
+
+              <span class="card-content">
+                <span class="name-block">
+                  <strong>백승훈</strong>
+                  <span class="english-name">Hun.S Baek</span>
+                </span>
+
+                <span class="info-list">
+                  <span class="info-row">
+                    <span class="info-label">Email</span>
+                    <span class="info-value">pablo37lc@gmail.com</span>
+                  </span>
+                  <span class="info-row">
+                    <span class="info-label">Phone</span>
+                    <span class="info-value">010-0000-0000</span>
+                  </span>
+                </span>
+              </span>
+            </span>
+
+            <span class="tap-hint">Tap to flip</span>
+          </span>
+
+          <span class="card-face card-back">
+            <span class="back-copy">
+              <strong>Back Side</strong>
+              <p>이 영역은 앞으로 포트폴리오 링크, QR 코드, 소개 문구로 확장할 수 있습니다.</p>
+            </span>
+            <span class="back-placeholder">Coming Soon</span>
+          </span>
+        </span>
+      </button>
+    </section>
+
+    <section class="projects-section" aria-labelledby="projects-title">
+      <div class="section-heading">
+        <p class="section-eyebrow">Project Cards</p>
+        <h2 id="projects-title">Selected Works</h2>
+      </div>
+
+      <div class="projects-grid">
+        <a class="project-card" href="https://example.com/project-alpha" target="_blank" rel="noreferrer">
+          <span class="project-thumb" aria-hidden="true">IMAGE</span>
+          <span class="project-body">
+            <span class="project-title">Project Alpha</span>
+            <span class="project-description">
+              모바일 중심 랜딩 페이지와 카드형 UI 구성을 실험하는 포트폴리오 예시 프로젝트입니다.
+            </span>
+          </span>
+        </a>
+
+        <a class="project-card" href="https://example.com/project-beta" target="_blank" rel="noreferrer">
+          <span class="project-thumb" aria-hidden="true">IMAGE</span>
+          <span class="project-body">
+            <span class="project-title">Project Beta</span>
+            <span class="project-description">
+              오프라인 명함 QR 유입을 고려해 빠른 정보 전달과 직관적인 탐색 흐름을 구성한 예시입니다.
+            </span>
+          </span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script src="./script.js"></script>
+</body>
+</html>
