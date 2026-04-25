@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hun.S Baek | Business Card</title>
+  <title>Web Profile</title>
+  <meta name="description" content="A static web profile with a business-card profile and project details.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
@@ -12,59 +13,55 @@
 <body>
   <main class="page-shell">
     <section class="hero-copy">
-      <p class="eyebrow">Personal Business Card</p>
-      <h1>Hun.S Baek</h1>
-      <p class="subtitle">
-        The Canvas of Myself
-      </p>
+      <p class="eyebrow" data-profile="eyebrow"></p>
+      <h1 data-profile="englishName"></h1>
+      <p class="subtitle" data-profile="subtitle"></p>
     </section>
 
-    <section class="card-stage" aria-label="명함 카드 영역">
+    <section class="card-stage" data-ui-aria="aria.cardStage">
       <button
         class="card-flip-button"
         id="business-card"
         type="button"
         aria-pressed="false"
-        aria-label="명함 카드 뒤집기"
+        data-ui-aria="aria.cardFlip"
       >
         <span class="card-flip-inner">
           <span class="card-face card-front">
-            <span class="card-glow" aria-hidden="true"></span>
+            <span class="card-flip-icon" aria-hidden="true">&#8635;</span>
             <span class="card-front-layout">
               <span class="profile-panel">
-                <span class="profile-photo" aria-hidden="true">
-                  <span>PHOTO</span>
-                </span>
+                <span class="profile-photo" id="profile-photo" aria-hidden="true"></span>
               </span>
 
               <span class="card-content">
                 <span class="name-block">
-                  <strong>백승훈</strong>
-                  <span class="english-name">Hun.S Baek</span>
+                  <strong data-profile="name"></strong>
+                  <span class="english-name" data-profile="englishName"></span>
                 </span>
 
                 <span class="info-list">
                   <span class="info-row">
-                    <span class="info-label">Email</span>
-                    <span class="info-value">pablo37lc@gmail.com</span>
+                    <span class="info-label" data-ui="labels.email"></span>
+                    <span class="info-value" data-profile="contact.email"></span>
                   </span>
                   <span class="info-row">
-                    <span class="info-label">Phone</span>
-                    <span class="info-value">010-0000-0000</span>
+                    <span class="info-label" data-ui="labels.phone"></span>
+                    <span class="info-value" data-profile="contact.phone"></span>
                   </span>
                 </span>
               </span>
             </span>
 
-            <span class="tap-hint">Tap to flip</span>
+            <span class="tap-hint" data-profile="frontBadge"></span>
           </span>
 
           <span class="card-face card-back">
             <span class="back-copy">
-              <strong>Back Side</strong>
-              <p>이 영역은 앞으로 포트폴리오 링크, QR 코드, 소개 문구로 확장할 수 있습니다.</p>
+              <strong data-profile="back.title"></strong>
+              <p data-profile="back.description"></p>
             </span>
-            <span class="back-placeholder">Coming Soon</span>
+            <span class="back-placeholder" data-profile="back.badge"></span>
           </span>
         </span>
       </button>
@@ -72,34 +69,66 @@
 
     <section class="projects-section" aria-labelledby="projects-title">
       <div class="section-heading">
-        <p class="section-eyebrow">Project Cards</p>
-        <h2 id="projects-title">Selected Works</h2>
+        <p class="section-eyebrow" data-ui="sections.projectsEyebrow"></p>
+        <h2 id="projects-title" data-ui="sections.projectsTitle"></h2>
       </div>
 
-      <div class="projects-grid">
-        <a class="project-card" href="https://example.com/project-alpha" target="_blank" rel="noreferrer">
-          <span class="project-thumb" aria-hidden="true">IMAGE</span>
-          <span class="project-body">
-            <span class="project-title">Project Alpha</span>
-            <span class="project-description">
-              모바일 중심 랜딩 페이지와 카드형 UI 구성을 실험하는 포트폴리오 예시 프로젝트입니다.
-            </span>
-          </span>
-        </a>
-
-        <a class="project-card" href="https://example.com/project-beta" target="_blank" rel="noreferrer">
-          <span class="project-thumb" aria-hidden="true">IMAGE</span>
-          <span class="project-body">
-            <span class="project-title">Project Beta</span>
-            <span class="project-description">
-              오프라인 명함 QR 유입을 고려해 빠른 정보 전달과 직관적인 탐색 흐름을 구성한 예시입니다.
-            </span>
-          </span>
-        </a>
-      </div>
+      <div class="projects-grid" id="projects-grid"></div>
     </section>
   </main>
 
+  <div class="project-overlay" id="project-overlay" aria-hidden="true">
+    <section
+      class="project-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="project-detail-title"
+      tabindex="-1"
+    >
+      <div class="project-panel-top">
+        <p class="project-detail-eyebrow" id="project-detail-eyebrow"></p>
+        <button class="icon-button" type="button" data-project-close data-ui-aria="aria.projectClose">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="project-detail-layout">
+        <div class="project-detail-preview" id="project-detail-preview" aria-hidden="true"></div>
+
+        <div class="project-detail-copy">
+          <h2 id="project-detail-title"></h2>
+          <p id="project-detail-summary"></p>
+
+          <dl class="project-meta">
+            <div>
+              <dt data-ui="labels.role"></dt>
+              <dd id="project-detail-role"></dd>
+            </div>
+            <div>
+              <dt data-ui="labels.result"></dt>
+              <dd id="project-detail-result"></dd>
+            </div>
+          </dl>
+
+          <div class="detail-section">
+            <h3 data-ui="sections.featuresTitle"></h3>
+            <ul class="feature-list" id="project-detail-features"></ul>
+          </div>
+
+          <div class="detail-section">
+            <h3 data-ui="sections.techTitle"></h3>
+            <div class="tech-list" id="project-detail-tech"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-actions" id="project-actions">
+        <a class="primary-action" id="project-detail-link" href="#" target="_blank" rel="noreferrer" data-ui="actions.projectLink"></a>
+      </div>
+    </section>
+  </div>
+
+  <script src="./data.js"></script>
   <script src="./script.js"></script>
 </body>
 </html>
