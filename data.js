@@ -4,6 +4,8 @@ window.PORTFOLIO_DATA = {
       cardStage: "명함 카드 영역",
       cardFlip: "명함 카드 뒤집기",
       projectClose: "프로젝트 상세 닫기",
+      galleryPrevious: "이전 프로젝트 이미지",
+      galleryNext: "다음 프로젝트 이미지",
     },
     labels: {
       email: "Email",
@@ -54,7 +56,10 @@ window.PORTFOLIO_DATA = {
   projects: [
     {
       id: "canvas",
-      theme: "canvas",
+      theme: "blue",
+      placeholder: {
+        type: "cards",
+      },
       eyebrow: "Profile Template",
       title: "Canvas",
 
@@ -80,6 +85,8 @@ window.PORTFOLIO_DATA = {
         alt: "Canvas 웹 프로필 템플릿 미리보기",
       },
 
+      images: [],
+
       link: {
         href: "",
         label: "",
@@ -87,7 +94,10 @@ window.PORTFOLIO_DATA = {
     },
     {
       id: "stock-ing",
-      theme: "stocking",
+      theme: "green",
+      placeholder: {
+        type: "bar-chart",
+      },
       eyebrow: "Portfolio Monitor",
       title: "Stock_ing",
 
@@ -119,6 +129,8 @@ window.PORTFOLIO_DATA = {
         src: "",
         alt: "Stock_ing 포트폴리오 모니터링 화면",
       },
+
+      images: [],
 
       link: {
         href: "https://somnistellar.github.io/Stocking/",

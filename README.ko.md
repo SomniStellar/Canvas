@@ -1,8 +1,18 @@
 # Canvas
 
-Canvas는 정적 웹 프로필 템플릿입니다. `data.js`만 수정하면 HTML 구조를 직접 바꾸지 않고 프로필 카드, 소개/설명 영역, 프로젝트 카드, 전체화면 프로젝트 상세를 배포할 수 있습니다.
+Canvas는 정적 웹 프로필 템플릿입니다. 이 문서는 템플릿을 가져다 본인의 프로필, 프로젝트 설명, 이미지, 링크로 바꾸려는 사용자를 위한 사용 가이드입니다.
 
 영문 문서는 [README.md](./README.md)를 확인하세요.
+
+## 수정 대상
+
+일반적인 템플릿 사용자는 먼저 `data.js`를 수정하면 됩니다. HTML 구조는 이미 `data.js`의 내용을 읽도록 연결되어 있습니다.
+
+- `ui`: 공통 라벨, 접근성 라벨, 플레이스홀더, 섹션 제목, 버튼 문구
+- `profile`: 프로필 카드 내용, 연락처, 프로필 이미지 경로, 앞면 배지, 뒷면 문구
+- `projects`: 프로젝트 카드 내용, 상세 내용, 대체 미리보기 설정, 이미지 경로, 외부 링크
+
+시각 디자인을 바꾸려면 `styles.css`를 수정합니다. 페이지 구조 자체를 바꿀 때만 `index.html`을 수정합니다.
 
 ## 파일 구조
 
@@ -17,52 +27,21 @@ Canvas/
     projects/
 ```
 
-`assets/profile/`에는 프로필 이미지를 넣고, `assets/projects/`에는 프로젝트 스크린샷이나 썸네일 이미지를 넣습니다. 빈 폴더도 git에 남도록 `.gitkeep` 파일을 포함했습니다.
+`assets/profile/`에는 프로필 이미지를 넣습니다. `assets/projects/`에는 프로젝트 썸네일과 상세 화면 이미지를 넣습니다. 빈 이미지 폴더도 git에 남도록 `.gitkeep` 파일이 들어 있습니다.
 
-## 빠른 수정
+## 이미지 가이드
 
-1. `data.js`의 `profile` 값을 본인 정보로 바꿉니다.
-2. `projects` 배열에 프로젝트를 추가하거나 수정합니다.
-3. 이미지는 `assets/profile/` 또는 `assets/projects/`에 넣고 `src` 경로를 지정합니다.
-4. 브라우저에서 `index.html`을 열어 확인합니다.
+- 프로필 이미지: 가장 자연스럽게 맞추려면 `4:5` 세로 이미지를 사용합니다.
+- 프로젝트 썸네일: 작은 카드에서 알아보기 쉬운 스크린샷이나 대표 이미지를 사용합니다.
+- 프로젝트 상세 이미지: `images` 배열에 하나 이상의 전체 화면 스크린샷을 넣습니다.
 
-## 데이터 구성
+## 빠른 시작
 
-`data.js`는 수정 목적별로 나뉩니다.
-
-- `ui`: 공통 라벨, 접근성 라벨, 플레이스홀더, 섹션 제목, 액션 문구
-- `profile`: 프로필 카드 내용, 연락처, 이미지, 앞면 배지, 뒷면 문구
-- `projects`: 프로젝트 카드/상세 내용, 이미지, 외부 링크
-
-## UI 데이터
-
-```js
-ui: {
-  aria: {
-    cardStage: "명함 카드 영역",
-    cardFlip: "명함 카드 뒤집기",
-    projectClose: "프로젝트 상세 닫기",
-  },
-  labels: {
-    email: "Email",
-    phone: "Phone",
-    role: "Role",
-    result: "Result",
-  },
-  placeholders: {
-    profilePhoto: "PHOTO",
-  },
-  sections: {
-    projectsEyebrow: "Project Cards",
-    projectsTitle: "Selected Works",
-    featuresTitle: "핵심 기능",
-    techTitle: "기술 스택",
-  },
-  actions: {
-    projectLink: "링크 이동",
-  },
-}
-```
+1. `data.js`의 `profile` 객체를 본인의 공개 프로필 정보로 바꿉니다.
+2. `projects` 배열의 객체를 본인의 프로젝트로 바꿉니다.
+3. 이미지 파일을 `assets/profile/` 또는 `assets/projects/`에 넣습니다.
+4. 각 이미지 `src`를 `./assets/projects/project-01.png` 같은 상대 경로로 지정합니다.
+5. 브라우저에서 `index.html`을 열어 결과를 확인합니다.
 
 ## 프로필 데이터
 
@@ -93,23 +72,17 @@ profile: {
 }
 ```
 
-`photo.src`를 비워두면 `ui.placeholders.profilePhoto` 값이 표시됩니다.
-
-## 배지 의미
-
-배지는 현재 카드 면을 짧게 요약하는 용도입니다.
-
-- 앞면: `Profile`이 적합합니다. 앞면은 이름, 사진, 연락처 등 프로필 정보를 보여줍니다.
-- 뒷면: `About`이 적합합니다. 뒷면은 사람, 페이지, 또는 템플릿 목적을 설명합니다.
-
-`Flip` 같은 동작 힌트와는 역할이 다릅니다. 회전 아이콘이 이미 상호작용을 알려주므로, 배지는 현재 면의 의미를 요약하는 편이 더 자연스럽습니다.
+`photo.src`가 비어 있으면 `ui.placeholders.profilePhoto` 값이 대신 표시됩니다.
 
 ## 프로젝트 데이터
 
 ```js
 {
   id: "project-id",
-  theme: "default",
+  theme: "blue",
+  placeholder: {
+    type: "cards",
+  },
   eyebrow: "Project Type",
   title: "Project Name",
 
@@ -126,9 +99,20 @@ profile: {
   },
 
   image: {
-    src: "./assets/projects/project-name.png",
-    alt: "Project screenshot",
+    src: "./assets/projects/project-thumbnail.png",
+    alt: "Project thumbnail",
   },
+
+  images: [
+    {
+      src: "./assets/projects/project-screen-01.png",
+      alt: "Project screen 1",
+    },
+    {
+      src: "./assets/projects/project-screen-02.png",
+      alt: "Project screen 2",
+    },
+  ],
 
   link: {
     href: "https://example.com",
@@ -137,15 +121,32 @@ profile: {
 }
 ```
 
-`image.src`를 비워두면 템플릿 미리보기 그래픽이 표시됩니다. `link.href`를 비워두면 프로젝트 상세 화면의 링크 버튼이 숨겨집니다.
+`image`는 카드 썸네일과 단일 이미지 대체값입니다. `images`는 전체화면 상세 갤러리입니다. `images`에 이미지가 여러 개 있으면 이전/다음 버튼과 카운터가 자동으로 표시됩니다.
 
-## 프로젝트 추가
+`images`와 `image.src`가 모두 비어 있으면 생성된 대체 미리보기가 표시됩니다. `link.href`가 비어 있으면 상세 화면의 링크 버튼은 숨겨집니다.
 
-`data.js`의 `projects` 배열에 객체를 하나 추가하면 카드가 자동 생성됩니다. 프로젝트 카드 HTML을 직접 복사할 필요는 없습니다.
+## 대체 미리보기 옵션
+
+`placeholder.type`은 생성되는 미리보기 형태를 결정합니다.
+
+- `cards`: 카드/타일형
+- `bar-chart`: 세로 막대그래프형
+- `line-chart`: 선형그래프형
+- `dashboard`: 대시보드형
+- `list`: 행/목록형
+
+`theme`은 프로젝트 색상 세트를 결정합니다. 생성된 대체 미리보기와 프로젝트 상세 화면의 eyebrow, 메타데이터 라벨, 기능 불릿, 기술 스택 칩, 링크 버튼 같은 강조 색상에 적용됩니다.
+
+- `blue`
+- `green`
+- `yellow`
+- `red`
+
+`theme`이 비어 있거나 알 수 없는 값이면 `blue`로 표시됩니다.
 
 ## 배포
 
-정적 파일만 사용하므로 GitHub Pages에 그대로 배포할 수 있습니다. 배포할 파일은 다음과 같습니다.
+정적 파일만 사용하므로 일반 정적 호스팅 서비스에 배포할 수 있습니다. GitHub Pages에 배포할 때는 다음 파일을 포함하면 됩니다.
 
 - `index.html`
 - `styles.css`

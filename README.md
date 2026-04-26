@@ -1,8 +1,18 @@
 # Canvas
 
-Canvas is a static web profile template. Edit `data.js` to publish a profile card, profile/about summary, project cards, and full-screen project details without changing the HTML structure.
+Canvas is a static web profile template. This README is a usage guide for people who want to reuse the template with their own profile, project descriptions, images, and links.
 
 Korean documentation is available in [README.ko.md](./README.ko.md).
+
+## What You Edit
+
+For normal template use, edit `data.js` first. The HTML structure is already wired to read content from that file.
+
+- `ui`: shared labels, accessibility labels, placeholders, section titles, and action text
+- `profile`: profile-card content, contact info, profile image path, front badge, and back-side copy
+- `projects`: project-card content, detail content, placeholder settings, image paths, and external links
+
+Edit `styles.css` only when you want to change the visual design. Edit `index.html` only when you need a different page structure.
 
 ## File Structure
 
@@ -17,52 +27,21 @@ Canvas/
     projects/
 ```
 
-Use `assets/profile/` for profile images and `assets/projects/` for project screenshots or thumbnails. The folders include `.gitkeep` files so the empty directories stay in git.
+Use `assets/profile/` for profile images. Use `assets/projects/` for project thumbnails and detail screenshots. Empty asset folders are kept in git with `.gitkeep`.
+
+## Image Guidelines
+
+- Profile image: use a `4:5` portrait image for the cleanest fit.
+- Project thumbnail: use a compact screenshot or representative image.
+- Project detail images: use one or more full screenshots in the `images` array.
 
 ## Quick Start
 
-1. Edit `profile` in `data.js`.
-2. Add or update objects in the `projects` array.
-3. Put images in `assets/profile/` or `assets/projects/`, then set the matching `src` path.
-4. Open `index.html` in a browser to check the result.
-
-## Data Layout
-
-`data.js` is split by editing purpose:
-
-- `ui`: shared labels, accessibility labels, placeholders, section titles, and action text
-- `profile`: profile-card content, contact info, image, front badge, and back-side copy
-- `projects`: project-card and project-detail content, screenshots, and external links
-
-## UI Data
-
-```js
-ui: {
-  aria: {
-    cardStage: "Business card area",
-    cardFlip: "Flip business card",
-    projectClose: "Close project details",
-  },
-  labels: {
-    email: "Email",
-    phone: "Phone",
-    role: "Role",
-    result: "Result",
-  },
-  placeholders: {
-    profilePhoto: "PHOTO",
-  },
-  sections: {
-    projectsEyebrow: "Project Cards",
-    projectsTitle: "Selected Works",
-    featuresTitle: "Key Features",
-    techTitle: "Tech Stack",
-  },
-  actions: {
-    projectLink: "Open Link",
-  },
-}
-```
+1. Replace the `profile` object in `data.js` with your own public profile information.
+2. Replace the objects in the `projects` array with your own projects.
+3. Put image files in `assets/profile/` or `assets/projects/`.
+4. Set each image `src` to a relative path such as `./assets/projects/project-01.png`.
+5. Open `index.html` in a browser and check the result.
 
 ## Profile Data
 
@@ -93,23 +72,17 @@ profile: {
 }
 ```
 
-If `photo.src` is empty, `ui.placeholders.profilePhoto` is shown instead.
-
-## Badge Meaning
-
-The badge is used as a short summary of the visible card side.
-
-- Front side: `Profile` works well because the front side shows profile identity and contact information.
-- Back side: `About` works well because the back side explains the person, page, or template purpose.
-
-This is different from an interaction hint such as `Flip`. The rotate icon already communicates the card interaction, so the badge can focus on summarizing the current side.
+If `photo.src` is empty, the template shows `ui.placeholders.profilePhoto` instead.
 
 ## Project Data
 
 ```js
 {
   id: "project-id",
-  theme: "default",
+  theme: "blue",
+  placeholder: {
+    type: "cards",
+  },
   eyebrow: "Project Type",
   title: "Project Name",
 
@@ -126,9 +99,20 @@ This is different from an interaction hint such as `Flip`. The rotate icon alrea
   },
 
   image: {
-    src: "./assets/projects/project-name.png",
-    alt: "Project screenshot",
+    src: "./assets/projects/project-thumbnail.png",
+    alt: "Project thumbnail",
   },
+
+  images: [
+    {
+      src: "./assets/projects/project-screen-01.png",
+      alt: "Project screen 1",
+    },
+    {
+      src: "./assets/projects/project-screen-02.png",
+      alt: "Project screen 2",
+    },
+  ],
 
   link: {
     href: "https://example.com",
@@ -137,15 +121,32 @@ This is different from an interaction hint such as `Flip`. The rotate icon alrea
 }
 ```
 
-If `image.src` is empty, the template preview graphic is shown. If `link.href` is empty, the project detail link button is hidden.
+`image` is the primary card thumbnail and single-image fallback. `images` is the full-screen detail gallery. If `images` has multiple entries, previous/next controls and a counter are shown automatically.
 
-## Add A Project
+If both `images` and `image.src` are empty, the template shows a generated placeholder preview. If `link.href` is empty, the detail link button is hidden.
 
-Add one object to the `projects` array in `data.js`. The card is generated automatically, so you do not need to copy project-card HTML.
+## Placeholder Options
+
+`placeholder.type` controls the generated preview shape.
+
+- `cards`: card/tile layout
+- `bar-chart`: vertical bar chart layout
+- `line-chart`: line chart layout
+- `dashboard`: dashboard-style layout
+- `list`: row/list layout
+
+`theme` controls the project color set. It is used for generated placeholder previews and project-detail accent colors such as the eyebrow, metadata labels, feature bullets, tech chips, and link button.
+
+- `blue`
+- `green`
+- `yellow`
+- `red`
+
+If `theme` is empty or unknown, the template falls back to `blue`.
 
 ## Deployment
 
-This project uses static files only. For GitHub Pages, publish:
+This project uses static files only. Any static hosting service can serve it. For GitHub Pages, publish these files:
 
 - `index.html`
 - `styles.css`

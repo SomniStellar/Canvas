@@ -21,6 +21,8 @@ const projectActions = document.getElementById("project-actions");
 const projectPreview = document.getElementById("project-detail-preview");
 
 let activeProjectTrigger = null;
+let activeProject = null;
+let activeImageIndex = 0;
 
 function getValue(source, path) {
   return path.split(".").reduce((current, key) => current?.[key], source);
@@ -71,7 +73,38 @@ function renderProfile(profile) {
   }
 }
 
+const PLACEHOLDER_TYPES = {
+  cards: { cardItems: 3, detailItems: 4 },
+  "bar-chart": { cardItems: 5, detailItems: 7 },
+  "line-chart": { cardItems: 5, detailItems: 6 },
+  dashboard: { cardItems: 4, detailItems: 5 },
+  list: { cardItems: 4, detailItems: 6 },
+};
+const PROJECT_THEMES = new Set(["blue", "green", "yellow", "red"]);
+
+function getProjectPlaceholderType(project) {
+  const preferredType = project.placeholder?.type || "cards";
+  return PLACEHOLDER_TYPES[preferredType] ? preferredType : "cards";
+}
+
+function getProjectTheme(project) {
+  return PROJECT_THEMES.has(project.theme) ? project.theme : "blue";
+}
+
+function createPlaceholderVisual(baseClass, type, itemCount) {
+  const visual = document.createElement("span");
+  visual.className = `${baseClass} ${baseClass}--${type}`;
+
+  for (let index = 0; index < itemCount; index += 1) {
+    visual.append(document.createElement("span"));
+  }
+
+  return visual;
+}
+
 function createMockPreview(project, mode) {
+  const type = getProjectPlaceholderType(project);
+  const settings = PLACEHOLDER_TYPES[type];
   const preview = document.createElement("span");
   preview.className = mode === "card" ? "thumb-window" : "preview-browser";
 
@@ -80,14 +113,7 @@ function createMockPreview(project, mode) {
   preview.append(topLine);
 
   if (mode === "card") {
-    const content = document.createElement("span");
-    content.className = project.theme === "stocking" ? "thumb-chart" : "thumb-tiles";
-
-    const itemCount = project.theme === "stocking" ? 4 : 3;
-    for (let index = 0; index < itemCount; index += 1) {
-      content.append(document.createElement("span"));
-    }
-
+    const content = createPlaceholderVisual("thumb-visual", type, settings.cardItems);
     const summary = document.createElement("span");
     summary.className = "thumb-summary";
     summary.append(document.createElement("span"), document.createElement("span"));
@@ -96,28 +122,38 @@ function createMockPreview(project, mode) {
     return preview;
   }
 
-  const dashboard = document.createElement("span");
-  dashboard.className = "preview-dashboard";
-
-  ["preview-kpi", "preview-kpi", "preview-line", "preview-table"].forEach((className) => {
-    const item = document.createElement("span");
-    item.className = className;
-    dashboard.append(item);
-  });
-
-  preview.append(dashboard);
+  preview.append(createPlaceholderVisual("preview-visual", type, settings.detailItems));
   return preview;
 }
 
+function getProjectImages(project) {
+  const galleryImages = Array.isArray(project.images)
+    ? project.images.filter((image) => image?.src)
+    : [];
+
+  if (galleryImages.length > 0) {
+    return galleryImages;
+  }
+
+  const image = project.image || {};
+  return image.src ? [image] : [];
+}
+
+function getProjectThumbnail(project) {
+  const image = project.image || {};
+  return image.src ? image : getProjectImages(project)[0] || {};
+}
+
 function createProjectVisual(project, mode) {
+  const theme = getProjectTheme(project);
   const wrapper = document.createElement("span");
   wrapper.className =
     mode === "card"
-      ? `project-thumb project-thumb--${project.theme || "default"}`
-      : `project-detail-preview-inner project-detail-preview-inner--${project.theme || "default"}`;
+      ? `project-thumb project-thumb--${theme}`
+      : "project-detail-preview-inner";
   wrapper.setAttribute("aria-hidden", "true");
 
-  const imageData = project.image || {};
+  const imageData = mode === "card" ? getProjectThumbnail(project) : project.image || {};
   if (imageData.src) {
     const image = document.createElement("img");
     image.src = imageData.src;
@@ -132,9 +168,86 @@ function createProjectVisual(project, mode) {
   return wrapper;
 }
 
+function setProjectImageIndex(nextIndex) {
+  if (!activeProject) {
+    return;
+  }
+
+  const images = getProjectImages(activeProject);
+  if (images.length < 2) {
+    return;
+  }
+
+  activeImageIndex = (nextIndex + images.length) % images.length;
+  renderProjectPreview(activeProject);
+}
+
+function createGalleryButton(direction) {
+  const button = document.createElement("button");
+  const isPrevious = direction === "previous";
+  button.className = `project-gallery-button project-gallery-button--${direction}`;
+  button.type = "button";
+
+  const label = isPrevious
+    ? ui.aria?.galleryPrevious || "Previous project image"
+    : ui.aria?.galleryNext || "Next project image";
+  button.setAttribute("aria-label", label);
+
+  const icon = document.createElement("span");
+  icon.setAttribute("aria-hidden", "true");
+  icon.textContent = isPrevious ? "‹" : "›";
+  button.append(icon);
+
+  button.addEventListener("click", () => {
+    setProjectImageIndex(activeImageIndex + (isPrevious ? -1 : 1));
+  });
+
+  return button;
+}
+
+function renderProjectPreview(project) {
+  const images = getProjectImages(project);
+  const theme = getProjectTheme(project);
+
+  projectPreview.className = `project-detail-preview is-${theme}`;
+
+  if (images.length === 0) {
+    projectPreview.setAttribute("aria-hidden", "true");
+    projectPreview.replaceChildren(createProjectVisual(project, "detail"));
+    return;
+  }
+
+  activeImageIndex = Math.min(activeImageIndex, images.length - 1);
+  const imageData = images[activeImageIndex];
+  const gallery = document.createElement("div");
+  gallery.className = "project-gallery";
+
+  const frame = document.createElement("div");
+  frame.className = "project-gallery-frame";
+
+  const image = document.createElement("img");
+  image.src = imageData.src;
+  image.alt = imageData.alt || project.title || "";
+  image.className = "project-gallery-image";
+  frame.append(image);
+  gallery.append(frame);
+
+  if (images.length > 1) {
+    const counter = document.createElement("span");
+    counter.className = "project-gallery-counter";
+    counter.textContent = `${activeImageIndex + 1} / ${images.length}`;
+
+    gallery.append(createGalleryButton("previous"), createGalleryButton("next"), counter);
+  }
+
+  projectPreview.setAttribute("aria-hidden", "false");
+  projectPreview.replaceChildren(gallery);
+}
+
 function createProjectCard(project) {
+  const theme = getProjectTheme(project);
   const card = document.createElement("button");
-  card.className = "project-card";
+  card.className = `project-card project-card--${theme}`;
   card.type = "button";
   card.dataset.projectId = project.id;
   card.setAttribute("aria-haspopup", "dialog");
@@ -170,7 +283,9 @@ function renderProjectCards(projects) {
 
 function renderProject(project) {
   const detail = project.detail || {};
+  const theme = getProjectTheme(project);
 
+  projectPanel.className = `project-panel is-${theme}`;
   projectEyebrow.textContent = project.eyebrow || "";
   projectTitle.textContent = project.title || "";
   projectSummary.textContent = detail.summary || "";
@@ -193,8 +308,7 @@ function renderProject(project) {
     }),
   );
 
-  projectPreview.className = `project-detail-preview is-${project.theme || "default"}`;
-  projectPreview.replaceChildren(createProjectVisual(project, "detail"));
+  renderProjectPreview(project);
 
   const link = project.link || {};
   if (link.href) {
@@ -217,6 +331,8 @@ function openProject(projectId, trigger) {
   }
 
   activeProjectTrigger = trigger;
+  activeProject = project;
+  activeImageIndex = 0;
   renderProject(project);
   projectPanel.scrollTop = 0;
   document.body.classList.add("is-project-open");
@@ -237,6 +353,9 @@ function closeProject() {
   if (activeProjectTrigger) {
     activeProjectTrigger.focus();
   }
+
+  activeProject = null;
+  activeImageIndex = 0;
 }
 
 if (businessCard) {
@@ -257,8 +376,22 @@ projectOverlay?.addEventListener("click", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && projectOverlay?.classList.contains("is-open")) {
+  if (!projectOverlay?.classList.contains("is-open")) {
+    return;
+  }
+
+  if (event.key === "Escape") {
     closeProject();
+    return;
+  }
+
+  if (event.key === "ArrowLeft") {
+    setProjectImageIndex(activeImageIndex - 1);
+    return;
+  }
+
+  if (event.key === "ArrowRight") {
+    setProjectImageIndex(activeImageIndex + 1);
   }
 });
 
