@@ -32,8 +32,8 @@ Use `assets/profile/` for profile images. Use `assets/projects/` for project thu
 ## Image Guidelines
 
 - Profile image: use a `4:5` portrait image for the cleanest fit.
-- Project thumbnail: use a compact screenshot or representative image.
-- Project detail images: use one or more full screenshots in the `images` array.
+- Project thumbnail: use a `4:5` portrait image, or let the template crop it into that area.
+- Project detail images: use one or more screenshots in the `images` array. The detail preview area also keeps the `4:5` portrait ratio.
 
 ## Quick Start
 
