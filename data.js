@@ -87,10 +87,16 @@ window.PORTFOLIO_DATA = {
 
       images: [],
 
-      link: {
-        href: "",
-        label: "",
-      },
+      links: [
+        {
+          href: "https://somnistellar.github.io/Canvas/",
+          label: "Demo",
+        },
+        {
+          href: "https://github.com/SomniStellar/Canvas",
+          label: "GitHub",
+        },
+      ],
     },
     {
       id: "stock-ing",
@@ -132,10 +138,16 @@ window.PORTFOLIO_DATA = {
 
       images: [],
 
-      link: {
-        href: "https://somnistellar.github.io/Stocking/",
-        label: "링크 이동",
-      },
+      links: [
+        {
+          href: "https://somnistellar.github.io/Stocking/",
+          label: "Demo",
+        },
+        {
+          href: "https://github.com/SomniStellar/Stocking",
+          label: "GitHub",
+        },
+      ],
     },
   ],
 };

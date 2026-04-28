@@ -41,7 +41,8 @@ Use `assets/profile/` for profile images. Use `assets/projects/` for project thu
 2. Replace the objects in the `projects` array with your own projects.
 3. Put image files in `assets/profile/` or `assets/projects/`.
 4. Set each image `src` to a relative path such as `./assets/projects/project-01.png`.
-5. Open `index.html` in a browser and check the result.
+5. Add external project destinations to `links`, with the main destination first.
+6. Open `index.html` in a browser and check the result.
 
 ## Profile Data
 
@@ -114,16 +115,24 @@ If `photo.src` is empty, the template shows `ui.placeholders.profilePhoto` inste
     },
   ],
 
-  link: {
-    href: "https://example.com",
-    label: "Open Link",
-  },
+  links: [
+    {
+      href: "https://example.com",
+      label: "Live Site",
+    },
+    {
+      href: "https://github.com/example/project",
+      label: "GitHub",
+    },
+  ],
 }
 ```
 
 `image` is the primary card thumbnail and single-image fallback. `images` is the full-screen detail gallery. If `images` has multiple entries, previous/next controls and a counter are shown automatically.
 
-If both `images` and `image.src` are empty, the template shows a generated placeholder preview. If `link.href` is empty, the detail link button is hidden.
+If both `images` and `image.src` are empty, the template shows a generated placeholder preview. `links` is the list of external buttons shown in the project detail view. If `links` is empty, the detail action area is hidden. Existing single `link` objects are still supported as a fallback.
+
+Put the primary destination first in `links`. The button area is right-aligned, so secondary links are rendered first and the first `links` item is rendered as the rightmost primary button.
 
 ## Placeholder Options
 

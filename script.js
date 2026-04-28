@@ -16,7 +16,6 @@ const projectRole = document.getElementById("project-detail-role");
 const projectResult = document.getElementById("project-detail-result");
 const projectFeatures = document.getElementById("project-detail-features");
 const projectTech = document.getElementById("project-detail-tech");
-const projectLink = document.getElementById("project-detail-link");
 const projectActions = document.getElementById("project-actions");
 const projectPreview = document.getElementById("project-detail-preview");
 
@@ -281,6 +280,25 @@ function renderProjectCards(projects) {
   projectsGrid.replaceChildren(...projects.map(createProjectCard));
 }
 
+function getProjectLinks(project) {
+  if (Array.isArray(project.links) && project.links.length > 0) {
+    return project.links.filter((link) => link?.href);
+  }
+
+  return project.link?.href ? [project.link] : [];
+}
+
+function createProjectActionLink(link, isPrimary = false) {
+  const action = document.createElement("a");
+  action.className = isPrimary ? "primary-action" : "primary-action primary-action--secondary";
+  action.href = link.href;
+  action.target = "_blank";
+  action.rel = "noopener noreferrer";
+  action.textContent = link.label || ui.actions?.projectLink || "";
+
+  return action;
+}
+
 function renderProject(project) {
   const detail = project.detail || {};
   const theme = getProjectTheme(project);
@@ -310,17 +328,18 @@ function renderProject(project) {
 
   renderProjectPreview(project);
 
-  const link = project.link || {};
-  if (link.href) {
-    projectActions.hidden = false;
-    projectLink.hidden = false;
-    projectLink.href = link.href;
-    projectLink.textContent = link.label || ui.actions?.projectLink || "";
-  } else {
-    projectActions.hidden = true;
-    projectLink.hidden = true;
-    projectLink.removeAttribute("href");
+  const links = getProjectLinks(project);
+  projectActions.hidden = links.length === 0;
+  if (links.length === 0) {
+    projectActions.replaceChildren();
+    return;
   }
+
+  const [primaryLink, ...secondaryLinks] = links;
+  projectActions.replaceChildren(
+    ...secondaryLinks.map((link) => createProjectActionLink(link)),
+    createProjectActionLink(primaryLink, true),
+  );
 }
 
 function openProject(projectId, trigger) {

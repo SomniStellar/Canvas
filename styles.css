@@ -1120,6 +1120,8 @@ button {
 
 .project-actions {
   display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
   justify-content: flex-end;
   padding-top: 18px;
   border-top: 1px solid var(--line);
@@ -1130,6 +1132,7 @@ button {
 }
 
 .primary-action {
+  flex: 0 1 auto;
   min-width: 112px;
   display: inline-flex;
   align-items: center;
@@ -1145,6 +1148,12 @@ button {
   border: 1px solid var(--preview-accent);
   background: var(--preview-accent);
   color: #ffffff;
+}
+
+.primary-action--secondary {
+  border-color: var(--preview-accent-soft);
+  background: #ffffff;
+  color: var(--preview-accent);
 }
 
 .primary-action[hidden] {
@@ -1312,6 +1321,14 @@ button {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .project-actions {
+    justify-content: stretch;
+  }
+
+  .primary-action {
+    flex: 1 1 128px;
   }
 
   .tap-hint {

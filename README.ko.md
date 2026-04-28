@@ -41,7 +41,8 @@ Canvas/
 2. `projects` 배열의 객체를 본인의 프로젝트로 바꿉니다.
 3. 이미지 파일을 `assets/profile/` 또는 `assets/projects/`에 넣습니다.
 4. 각 이미지 `src`를 `./assets/projects/project-01.png` 같은 상대 경로로 지정합니다.
-5. 브라우저에서 `index.html`을 열어 결과를 확인합니다.
+5. 프로젝트 외부 이동 경로를 `links`에 넣고, 가장 중요한 링크를 첫 번째에 둡니다.
+6. 브라우저에서 `index.html`을 열어 결과를 확인합니다.
 
 ## 프로필 데이터
 
@@ -114,16 +115,24 @@ profile: {
     },
   ],
 
-  link: {
-    href: "https://example.com",
-    label: "Open Link",
-  },
+  links: [
+    {
+      href: "https://example.com",
+      label: "사이트 보기",
+    },
+    {
+      href: "https://github.com/example/project",
+      label: "GitHub",
+    },
+  ],
 }
 ```
 
 `image`는 카드 썸네일과 단일 이미지 대체값입니다. `images`는 전체화면 상세 갤러리입니다. `images`에 이미지가 여러 개 있으면 이전/다음 버튼과 카운터가 자동으로 표시됩니다.
 
-`images`와 `image.src`가 모두 비어 있으면 생성된 대체 미리보기가 표시됩니다. `link.href`가 비어 있으면 상세 화면의 링크 버튼은 숨겨집니다.
+`images`와 `image.src`가 모두 비어 있으면 생성된 대체 미리보기가 표시됩니다. `links`는 프로젝트 상세 화면에 표시되는 외부 버튼 목록입니다. `links`가 비어 있으면 상세 화면의 버튼 영역은 숨겨집니다. 기존 단일 `link` 객체도 대체값으로 계속 지원됩니다.
+
+가장 중요한 이동 경로를 `links`의 첫 번째 항목에 둡니다. 버튼 영역은 우측 정렬이므로 보조 링크가 먼저 렌더링되고, 첫 번째 `links` 항목은 최우측의 메인 버튼으로 표시됩니다.
 
 ## 대체 미리보기 옵션
 
